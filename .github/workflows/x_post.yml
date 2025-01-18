@@ -22,4 +22,4 @@ jobs:
     - name: Run Python script
       env:
         X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
-      run: python post_to_x.py
+      run: python scripts/gemini_to_x.py  # スクリプトを実行
