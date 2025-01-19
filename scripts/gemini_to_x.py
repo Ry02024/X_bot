@@ -9,6 +9,7 @@ X_API_KEY = os.getenv("X_API_KEY")
 X_API_SECRET = os.getenv("X_API_SECRET")
 X_ACCESS_TOKEN = os.getenv("X_ACCESS_TOKEN")
 X_ACCESS_TOKEN_SECRET = os.getenv("X_ACCESS_TOKEN_SECRET")
+X_BEARER_TOKEN = os.getenv("X_BEARER_TOKEN")
 
 # 必須環境変数の確認
 if not all([GEMINI_API_KEY, X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET]):
@@ -25,7 +26,7 @@ configure_gemini(GEMINI_API_KEY)
 def get_recent_posts(count=2):
     url = "https://api.twitter.com/2/users/me/tweets"
     headers = {
-        "Authorization": f"Bearer {X_ACCESS_TOKEN}"
+        "Authorization": f"Bearer {X_BEARER_TOKEN}"
     }
     params = {
         "max_results": count
