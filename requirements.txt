@@ -1,3 +1,4 @@
 tweepy
 requests
+requests_oauthlib
 google-generativeai
