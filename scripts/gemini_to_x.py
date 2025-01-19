@@ -1,6 +1,7 @@
 import requests
 from requests_oauthlib import OAuth1
 import os
+import datetime
 
 def post_to_x(text):
     """
@@ -30,5 +31,6 @@ def post_to_x(text):
 
 
 if __name__ == "__main__":
-    text = "これはGitHub Actionsからのテスト投稿です。OAuth 1.0a"
+    now = datetime.datetime.now()
+    text = f"これはGitHub Actionsからのテスト投稿です。OAuth 1.0a - {now.strftime('%Y-%m-%d %H:%M:%S')}"
     post_to_x(text)
