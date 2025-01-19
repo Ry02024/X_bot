@@ -14,7 +14,7 @@ def post_to_x(text):
     access_token = os.environ.get("X_ACCESS_TOKEN")
     access_token_secret = os.environ.get("X_ACCESS_TOKEN_SECRET")
 
-    if not all():
+    if not all([consumer_key, consumer_secret, access_token, access_token_secret]):
         raise ValueError("必要な環境変数が設定されていません。")
 
     auth = OAuth1(consumer_key, consumer_secret, access_token, access_token_secret)
