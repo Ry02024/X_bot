@@ -1,4 +1,5 @@
 import os
+import random
 import requests
 from requests_oauthlib import OAuth1
 import google.generativeai as genai
@@ -9,7 +10,6 @@ X_API_KEY = os.getenv("X_API_KEY")
 X_API_SECRET = os.getenv("X_API_SECRET")
 X_ACCESS_TOKEN = os.getenv("X_ACCESS_TOKEN")
 X_ACCESS_TOKEN_SECRET = os.getenv("X_ACCESS_TOKEN_SECRET")
-X_BEARER_TOKEN = os.getenv("X_BEARER_TOKEN")
 
 # 必須環境変数の確認
 if not all([GEMINI_API_KEY, X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET]):
@@ -22,36 +22,33 @@ def configure_gemini(api_key):
 
 configure_gemini(GEMINI_API_KEY)
 
-# Xの過去の投稿を取得
-def get_recent_posts(count=2):
-    url = "https://api.twitter.com/2/users/me/tweets"
-    headers = {
-        "Authorization": f"Bearer {X_BEARER_TOKEN}"
-    }
-    params = {
-        "max_results": count
-    }
-    response = requests.get(url, headers=headers, params=params)
-    if response.status_code != 200:
-        raise Exception(f"Xの投稿取得に失敗しました: {response.status_code} {response.text}")
-    
-    tweets = response.json().get("data", [])
-    return [tweet["text"] for tweet in tweets]
+# トピックリスト
+TOPICS = [
+    "食生活の工夫 - 厚めの鶏ハムやチゲ丼など、健康的かつ簡単に作れるレシピ。",
+    "時間管理とリフレッシュ方法 - 忙しいスケジュールの中で効率よく休む方法やストレス解消の工夫。",
+    "趣味の探索 - 新しい趣味やスキル（例えば絵画、陶芸、音楽など）に挑戦する方法。",
+    "心地よい生活空間作り - ミニマリズムや片付けの工夫で、居心地の良い部屋を作るヒント。",
+    "運動と健康管理 - 日常生活に取り入れられる軽い運動や健康的な生活習慣。",
+    "言語学習の工夫 - 効率的な英語学習法や、実生活に役立つフレーズの習得。",
+    "テクノロジーを活用した生活の最適化 - 家事やスケジュール管理に役立つアプリやツールの活用法。",
+    "自己成長のための読書 - 日々の生活やキャリアにインスピレーションを与える書籍の選び方。",
+    "家族や友人との時間の過ごし方 - 大切な人ともっと充実した時間を過ごすためのアイデア。",
+    "季節ごとの楽しみ方 - 季節に合わせた旅行プランや、趣味（花見、紅葉狩り、雪景色の楽しみ方）。"
+]
 
-# 新しい話題を生成（過去の話題を除外）
-def generate_unique_content(past_topics):
+# トピックをランダムに選択
+def select_random_topic():
+    return random.choice(TOPICS)
+
+# 選択されたトピックに基づいて記事を生成
+def generate_article(topic):
     prompt = f"""
-    以下の話題とは異なる新しい話題を生成してください。
-    - 過去の話題:
-    {', '.join(past_topics)}
-
-    条件:
-    - 話題は100字以内で簡潔に記述してください。
-    - 内容はユニークで、具体的な情報を含んでください。
+    以下のトピックについて、100字以内で簡潔かつ具体的に説明してください。
+    トピック: {topic}
     """
     try:
         response = genai.GenerativeModel(model_name="gemini-1.5-pro").generate_content(contents=[prompt])
-        generated_text = response.text.strip() if response.text else "新しい投稿を生成できませんでした。"
+        generated_text = response.text.strip() if response.text else "記事を生成できませんでした。"
         return generated_text
     except Exception as e:
         raise Exception(f"Gemini APIエラー: {e}")
@@ -62,7 +59,6 @@ def trim_to_140_chars(text):
 
 # Xに投稿する
 def post_to_x(text):
-    # OAuth 1.0a認証
     auth = OAuth1(X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET)
     url = "https://api.twitter.com/2/tweets"
     headers = {"Content-Type": "application/json"}
@@ -77,16 +73,16 @@ def post_to_x(text):
 # メイン処理
 if __name__ == "__main__":
     try:
-        # 過去2つの投稿を取得
-        recent_posts = get_recent_posts(count=2)
-        print(f"過去の投稿: {recent_posts}")
+        # トピックをランダムに選択
+        topic = select_random_topic()
+        print(f"選択されたトピック: {topic}")
 
-        # 新しい話題を生成
-        new_content = generate_unique_content(recent_posts)
-        print(f"生成された新しい話題: {new_content}")
+        # 記事を生成
+        article = generate_article(topic)
+        print(f"生成された記事: {article}")
 
         # 140字に切り詰める
-        tweet_content = trim_to_140_chars(new_content)
+        tweet_content = trim_to_140_chars(article)
         print(f"投稿する文章（140字以内）: {tweet_content}")
 
         # Xに投稿
