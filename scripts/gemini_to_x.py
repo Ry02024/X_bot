@@ -1,26 +1,34 @@
 import requests
+from requests_oauthlib import OAuth1
 import os
 
-# 環境変数からBearer Tokenを取得
-BEARER_TOKEN = os.getenv("X_BEARER_TOKEN")
+def post_to_x(text):
+    """
+    Xに投稿する関数
 
-# ツイート投稿関数
-def post_to_x(content):
+    Args:
+      text: 投稿するテキスト
+    """
+    consumer_key = os.environ.get("X_API_KEY")
+    consumer_secret = os.environ.get("X_API_SECRET")
+    access_token = os.environ.get("X_ACCESS_TOKEN")
+    access_token_secret = os.environ.get("X_ACCESS_TOKEN_SECRET")
+
+    if not all():
+        raise ValueError("必要な環境変数が設定されていません。")
+
+    auth = OAuth1(consumer_key, consumer_secret, access_token, access_token_secret)
     url = "https://api.twitter.com/2/tweets"
-    headers = {
-        "Authorization": f"Bearer {BEARER_TOKEN}",
-        "Content-Type": "application/json"
-    }
-    payload = {"text": content}
-    
-    response = requests.post(url, json=payload, headers=headers)
+    headers = {"Content-Type": "application/json"}
+    data = {"text": text}
+    response = requests.post(url, auth=auth, headers=headers, json=data)
 
-    if response.status_code == 201:
-        print("Tweet posted successfully!")
-    else:
-        print(f"Error posting to X: {response.status_code} - {response.json()}")
+    if response.status_code != 201:
+        raise Exception(f"Xへの投稿に失敗しました: {response.status_code} {response.text}")
 
-# 実行部分
+    print("Xに投稿しました。")
+
+
 if __name__ == "__main__":
-    tweet_content = "This is a test tweet using X_BEARER_TOKEN!"
-    post_to_x(tweet_content)
+    text = "これはGitHub Actionsからのテスト投稿です。OAuth 1.0a"
+    post_to_x(text)
