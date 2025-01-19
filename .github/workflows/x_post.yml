@@ -1,25 +1,27 @@
-name: Post to X (Twitter)
+name: X投稿ボット
 
 on:
-  workflow_dispatch:  # 手動トリガー
+  workflow_dispatch: # 手動実行
 
 jobs:
-  post_to_x:
+  tweet:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: チェックアウト
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
+      - name: Pythonのセットアップ
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x' # 適宜バージョンを変更してください
 
-    - name: Install dependencies
-      run: pip install requests
+      - name: 依存関係のインストール
+        run: pip install requests requests_oauthlib
 
-    - name: Run Python script
-      env:
-        X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
-      run: python scripts/gemini_to_x.py  # スクリプトを実行
+      - name: Xへの投稿
+        run: python post_to_x.py
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
