@@ -18,7 +18,7 @@ jobs:
           python-version: '3.x' # 適宜バージョンを変更してください
 
       - name: 依存関係のインストール
-        run: pip install requests requests_oauthlib
+        run: pip install -r requirements.txt
 
       - name: Xへの投稿
         run: python scripts/gemini_to_x.py
