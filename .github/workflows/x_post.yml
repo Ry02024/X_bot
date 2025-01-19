@@ -19,7 +19,7 @@ jobs:
         run: pip install requests requests_oauthlib
 
       - name: Xへの投稿
-        run: python post_to_x.py
+        run: python scripts/gemini_to_x.py
         env:
           X_API_KEY: ${{ secrets.X_API_KEY }}
           X_API_SECRET: ${{ secrets.X_API_SECRET }}
