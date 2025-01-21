@@ -2,7 +2,7 @@ name: X投稿ボット
 
 on:
   schedule:
-    - cron: "0 * * * *"
+    - cron: '0 */3 * * *'
   workflow_dispatch: # 手動実行
 
 jobs:
