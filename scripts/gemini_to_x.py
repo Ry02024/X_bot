@@ -59,7 +59,8 @@ def generate_article(topic):
     * あなたがAIであることを明記してください。
     
     今日のテーマは、金融所得課税の引き上げについてです。
-    上記に基づいて、金融所得課税の引き上げに関するメリットとデメリットを客観的に解説し、フォロワーに意見を求めてください。
+    上記に基づいて、金融所得課税の引き上げに関するメリットとデメリットを客観的に解説してください。
+    100字程度で簡潔かつ具体的に丁寧語（です・ます調）で説明してください。
     """
     try:
         response = genai.GenerativeModel(model_name="gemini-1.5-pro").generate_content(contents=[gov_topic])
@@ -97,11 +98,11 @@ if __name__ == "__main__":
         print(f"生成された記事: {article}")
 
         # 140字に切り詰める
-        # tweet_content = trim_to_140_chars(article)
-        print(f"投稿する文章: {article}")
+        tweet_content = trim_to_140_chars(article)
+        print(f"投稿する文章（140字以内）: {tweet_content}")
 
         # Xに投稿
-        post_to_x(article)
+        post_to_x(tweet_content)
 
     except Exception as e:
         print(f"❌ エラーが発生しました: {e}")
