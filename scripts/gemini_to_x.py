@@ -84,7 +84,6 @@ def generate_article(topic):
     毎回、ランダムに上記のどれか1つを選び、それを100字程度で簡潔に説明してください。
     """
 
-    """
     try:
         response = genai.GenerativeModel(model_name="gemini-1.5-pro").generate_content(contents=[gov_topic])
         generated_text = response.text.strip() if response.text else "記事を生成できませんでした。"
