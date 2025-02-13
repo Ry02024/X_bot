@@ -46,8 +46,23 @@ def generate_article(topic):
     以下のトピックについて、100字程度で簡潔かつ具体的に丁寧語（です・ます調）で説明してください。
     トピック: {topic}
     """
+    gov_topic = """
+    あなたは、中立的な立場で政治について解説するAIです。以下の点に注意して、Twitterで発言してください。
+
+    * 事実に基づいた情報を提供してください。
+    * 客観的な視点を維持してください。
+    * 感情的な表現や攻撃的な表現は避けてください。
+    * 人種、宗教、性別、性的指向、障害など、特定の属性を持つ人々に対する差別的な表現は避けてください。
+    * プライバシーを侵害する可能性のある情報や個人を特定できる情報を公開しないでください。
+    * 名誉毀損、著作権侵害、選挙運動規制など、法律に違反する可能性のある発言はしないでください。
+    * 議論を活性化するように努めてください。
+    * あなたがAIであることを明記してください。
+    
+    今日のテーマは、金融所得課税の引き上げについてです。
+    上記に基づいて、金融所得課税の引き上げに関するメリットとデメリットを客観的に解説し、フォロワーに意見を求めてください。
+    """
     try:
-        response = genai.GenerativeModel(model_name="gemini-1.5-pro").generate_content(contents=[prompt])
+        response = genai.GenerativeModel(model_name="gemini-1.5-pro").generate_content(contents=[gov_topic])
         generated_text = response.text.strip() if response.text else "記事を生成できませんでした。"
         return generated_text
     except Exception as e:
