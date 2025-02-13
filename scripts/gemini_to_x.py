@@ -101,7 +101,7 @@ if __name__ == "__main__":
         print(f"投稿する文章: {article}")
 
         # Xに投稿
-        post_to_x(tweet_content)
+        post_to_x(article)
 
     except Exception as e:
         print(f"❌ エラーが発生しました: {e}")
