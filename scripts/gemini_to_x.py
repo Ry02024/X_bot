@@ -97,8 +97,8 @@ if __name__ == "__main__":
         print(f"生成された記事: {article}")
 
         # 140字に切り詰める
-        tweet_content = trim_to_140_chars(article)
-        print(f"投稿する文章（140字以内）: {tweet_content}")
+        # tweet_content = trim_to_140_chars(article)
+        print(f"投稿する文章: {article}")
 
         # Xに投稿
         post_to_x(tweet_content)
