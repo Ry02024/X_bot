@@ -81,7 +81,7 @@ def generate_tweet_with_rag(context):
     """
     try:
         response = genai.GenerativeModel(model_name="gemini-1.5-pro").generate_content(contents=[prompt])
-        return trim_to_140_chars(response) else "ツイート生成に失敗しました。"
+        return trim_to_140_chars(response)
     except Exception as e:
         return f"Gemini APIエラー: {e}"
 
