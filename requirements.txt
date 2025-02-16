@@ -1,4 +1,6 @@
-tweepy
-requests
-requests_oauthlib
 google-generativeai
+sentence-transformers
+faiss-cpu
+requests
+requests-oauthlib
+python-docx
