@@ -31,6 +31,17 @@ def read_docx(file_path):
     doc = Document(file_path)
     return "\n".join([para.text for para in doc.paragraphs if para.text.strip()])
 
+# 2. データフォルダ内の全てのDOCXファイルを読み込む
+def read_all_docx_in_folder(folder_path="data"):
+    all_text = []
+    for file_name in os.listdir(folder_path):
+        if file_name.endswith(".docx"):  # DOCXファイルのみ対象
+            file_path = os.path.join(folder_path, file_name)
+            print(f"📂 読み込み中: {file_path}")
+            text = read_docx(file_path)
+            all_text.append(text)
+    return "\n".join(all_text)
+
 # 2. テキストをチャンクに分割
 def split_text(text, max_length=300):
     sentences = text.split('\n')
