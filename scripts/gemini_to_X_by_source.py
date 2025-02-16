@@ -99,11 +99,16 @@ def post_to_x(text):
     print(f"✅ Xに投稿しました: {text}")
 
 # 実行
-if __name__ == "__main__":
-    file_path = "data/161217 Ryo 修士論文 (1).docx"  # DOCXファイルのパス
-    text = read_docx(file_path)
-    chunks = split_text(text)
+#if __name__ == "__main__":
+ #   file_path = "data/161217 Ryo 修士論文 (1).docx"  # DOCXファイルのパス
+ #   text = read_docx(file_path)
+  #  chunks = split_text(text)
     
+if __name__ == "__main__":
+    folder_path = "data"  # DOCXファイルが格納されているフォルダ
+    text = read_all_docx_in_folder(folder_path)
+    chunks = split_text(text)
+
     model = SentenceTransformer('all-MiniLM-L6-v2')
     embeddings = compute_embeddings(chunks, model)
     # index = build_faiss_index(embeddings)
