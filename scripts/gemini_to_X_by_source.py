@@ -81,7 +81,7 @@ def generate_tweet_with_rag(context):
     """
     try:
         response = genai.GenerativeModel(model_name="gemini-1.5-pro").generate_content(contents=[prompt])
-        return response.text.strip()[:140] if response.text else "ツイート生成に失敗しました。"
+        return trim_to_140_chars(response) else "ツイート生成に失敗しました。"
     except Exception as e:
         return f"Gemini APIエラー: {e}"
 
@@ -97,6 +97,19 @@ def post_to_x(text):
         raise Exception(f"Xへの投稿に失敗しました: {response.status_code} {response.text}")
 
     print(f"✅ Xに投稿しました: {text}")
+
+# 🔹 140字以内に「。」（句点）で収める関数
+def trim_to_140_chars(text):
+    if len(text) <= 140:
+        return text  # すでに140字以内ならそのまま返す
+
+    # 「。」で区切る（140字以内の最も後ろの「。」を探す）
+    last_period = text[:140].rfind("。")
+    if last_period != -1:
+        return text[:last_period + 1]  # 「。」を含めて切る
+
+    # もし「。」がなければ、強制的に140字で切る
+    return text[:140]
 
 # 実行
 #if __name__ == "__main__":
