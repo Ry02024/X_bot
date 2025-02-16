@@ -1,0 +1,30 @@
+name: Auto Post to X
+
+on:
+  # schedule:
+  #   - cron: "0 * * * *"  # 1時間ごとに実行
+  workflow_dispatch:  # 手動実行も可能
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: チェックアウト
+        uses: actions/checkout@v3
+
+      - name: Pythonのセットアップ
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: 依存関係のインストール
+        run: pip install -r requirements.txt
+
+      - name: Xへの投稿
+        run: python scripts/gemini_to_X_by_source.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
