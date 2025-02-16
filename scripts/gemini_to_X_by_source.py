@@ -81,22 +81,10 @@ def generate_tweet_with_rag(context):
     """
     try:
         response = genai.GenerativeModel(model_name="gemini-1.5-pro").generate_content(contents=[prompt])
-        return trim_to_140_chars(response)
+        tweet = trim_to_140_chars(response)
+        return tweet
     except Exception as e:
         return f"Gemini APIエラー: {e}"
-
-# 7. X に投稿
-def post_to_x(text):
-    auth = OAuth1(X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET)
-    url = "https://api.twitter.com/2/tweets"
-    headers = {"Content-Type": "application/json"}
-    payload = {"text": text}
-
-    response = requests.post(url, auth=auth, headers=headers, json=payload)
-    if response.status_code != 201:
-        raise Exception(f"Xへの投稿に失敗しました: {response.status_code} {response.text}")
-
-    print(f"✅ Xに投稿しました: {text}")
 
 # 🔹 140字以内に「。」（句点）で収める関数
 def trim_to_140_chars(text):
@@ -111,12 +99,19 @@ def trim_to_140_chars(text):
     # もし「。」がなければ、強制的に140字で切る
     return text[:140]
 
-# 実行
-#if __name__ == "__main__":
- #   file_path = "data/161217 Ryo 修士論文 (1).docx"  # DOCXファイルのパス
- #   text = read_docx(file_path)
-  #  chunks = split_text(text)
-    
+# 7. X に投稿
+def post_to_x(text):
+    auth = OAuth1(X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET)
+    url = "https://api.twitter.com/2/tweets"
+    headers = {"Content-Type": "application/json"}
+    payload = {"text": text}
+
+    response = requests.post(url, auth=auth, headers=headers, json=payload)
+    if response.status_code != 201:
+        raise Exception(f"Xへの投稿に失敗しました: {response.status_code} {response.text}")
+
+    print(f"✅ Xに投稿しました: {text}")
+
 if __name__ == "__main__":
     folder_path = "data"  # DOCXファイルが格納されているフォルダ
     text = read_all_docx_in_folder(folder_path)
