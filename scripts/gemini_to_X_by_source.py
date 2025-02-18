@@ -2,7 +2,7 @@ import os
 import random
 import numpy as np
 from docx import Document
-import google.generativeai as genai
+# import google.generativeai as genai
 from sentence_transformers import SentenceTransformer
 import faiss
 import requests
