@@ -89,6 +89,30 @@ def generate_tweet_with_rag(context):
     except Exception as e:
         return f"Gemini APIエラー: {e}"
 
+def generate_tweet_with_rag2(context):
+    prompt = f"""以下の関連情報を要約してください。いくつか重要なトピックスが出来ると思いますが、その中から一つ選んで、そのエッセンスを丁寧語で100字前後の短文として生成してください。
+    * 自分の知識を既知にすることや、問いかけの表現をやめてください。
+    * インタビューやアンケートについての調査に関する言及もやめてください。
+    関連情報:
+    {context}
+    """
+    try:
+        # クライアント設定
+        client = genai.Client(api_key=GEMINI_API_KEY)
+        
+        # コンテンツ生成リクエスト
+        response = client.models.generate_content(
+            model="gemini-2.0-flash-001",  # 使用するモデルID
+            contents=prompt
+        )
+
+        generated_text = response.text.strip() if response.text else "記事を生成できませんでした。"
+    
+        tweet = trim_to_140_chars(generated_text)
+        return tweet
+    except Exception as e:
+        return f"Gemini APIエラー: {e}"
+
         
 
 
@@ -133,7 +157,7 @@ if __name__ == "__main__":
     print(context)
 
     # 文脈を元にツイートを生成
-    tweet = generate_tweet_with_rag(context)
+    tweet = generate_tweet_with_rag2(context)
     print("=== 生成されたツイート文 ===")
     print(tweet)
 
