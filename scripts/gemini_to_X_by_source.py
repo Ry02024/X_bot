@@ -26,7 +26,7 @@ def configure_gemini(api_key):
     genai.configure(api_key=api_key)
     print("Gemini APIの設定が完了しました。")
 
-configure_gemini(GEMINI_API_KEY)
+# configure_gemini(GEMINI_API_KEY)
 
 # 1. DOCX からのテキスト抽出
 def read_docx(file_path):
