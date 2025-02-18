@@ -4,3 +4,4 @@ faiss-cpu
 requests
 requests-oauthlib
 python-docx
+google-genai
