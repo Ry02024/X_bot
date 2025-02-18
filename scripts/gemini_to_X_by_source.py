@@ -7,6 +7,8 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import requests
 from requests_oauthlib import OAuth1
+from google import genai
+from google.genai import types
 
 # 環境変数からAPIキーとXの認証情報を取得
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
